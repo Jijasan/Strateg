@@ -38,10 +38,12 @@ X=0
 Y=0
 n=8
 c=$((n*n-2))
+q=$((2))
 A=( )
 B=( )
 C=($GRY $RED $BLU $GRN $YLW $CYN $MGN)
 G=( 25 25 25 25 25 25 25 )
+Q=( 0  0  0  0  0  0  0)
 
 gen () { 
 	for i in $(seq 0 $((n))) 
@@ -148,9 +150,13 @@ start
 while (($c>0))
 do
 	print
+	if (($q==0))
+	then
+		break
+	fi
 	while true 
 	do
-		if ((${G[$P]}<10))
+		if ((${G[$P]}<10))||((${Q[$P]}==1))
 		then
 			break
 		fi
@@ -198,12 +204,11 @@ do
 					fi
 				fi;;
 			"q")
-				stty echo
-				XY $((n+3)) $((0)) "${CON}${GRY}$DEF game over"
-				echo ""
-				exit;;
+				Q[$P]=$((1))
+				q=$((q-1))
+				break;;
 			"p")
-				break;
+				break;;
 		esac
 	done
 	gplus
@@ -226,4 +231,6 @@ then
 fi
 echo ""
 exit
+
+
 
