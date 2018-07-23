@@ -147,9 +147,9 @@ clear
 
 gen
 start
+print
 while (($c>0))
 do
-	print
 	if (($q==0))
 	then
 		break
@@ -212,7 +212,19 @@ do
 		esac
 	done
 	gplus
+	if (($P==1))
+	then
+		XY $((n+2)) $((1)) "$RED P1: ${G[1]} ${BDGRY}${BLU}P2: ${G[2]}$DEF                                              "
+	else
+		XY $((n+2)) $((1)) "$RED ${BDGRY}P1: ${G[1]}$DEF ${BLU}P2: ${G[2]}                                               "
+	fi
 	P=$((P%2+1))
+	if (($P==1))
+	then
+		XY $((n+2)) $((1)) "$RED ${BDGRY}P1: ${G[1]}$DEF ${BLU}P2: ${G[2]}                                              "
+	else
+		XY $((n+2)) $((1)) "$RED P1: ${G[1]} ${BDGRY}${BLU}P2: ${G[2]}$DEF                                              "
+	fi
 done
 print
 
@@ -231,6 +243,4 @@ then
 fi
 echo ""
 exit
-
-
 
