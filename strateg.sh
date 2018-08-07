@@ -101,11 +101,17 @@ print(){
 }
 
 start(){
+	c=$((n*n-2))
 	x=$((RANDOM%n))
 	y=$((RANDOM%n))
 	B[$((x*n+y))]=1
 	x=$((RANDOM%n))
 	y=$((RANDOM%n))
+	while ((${B[$((x*n+y))]}>0))
+	do
+		x=$((RANDOM%n))
+		y=$((RANDOM%n))
+	done
 	B[$((x*n+y))]=2
 }
 
@@ -140,17 +146,100 @@ buy(){
 	fi
 }
 
+settings(){
+	clear
+	echo -en $BDGRY"Size: 8"$DEF
+	while true
+	do
+		read -n1 input
+		case $input in
+			"a")
+				n=$((n-1))
+				if (($n<2))
+				then
+					n=2
+				fi
+				XY 1 7 ${BDGRY}${n}${DEF};;
+			"d")
+				n=$((n+1))
+				if (($n>9))
+				then
+					n=9
+				fi
+				XY 1 7 ${BDGRY}${n}${DEF};;
+			"b")
+				break;;
+		esac
+	done
+
+}
+
+menu(){
+	clear
+	echo -en ${BDGRY}"Play"${DEF}
+	echo ""
+	echo "Settings"
+	echo "Exit"
+	s[1]="Play"
+	s[2]="Settings"
+	s[3]="Exit"
+	rty=1
+	while true
+	do
+		read -n1 input
+		case $input in
+			"w")
+				XY $rty 1 ${s[$rty]}
+				rty=$((rty-1))
+				if (($rty<1))
+				then
+					rty=1
+				fi
+				XY $rty 1 ${BDGRY}${s[$rty]}$DEF;;
+			"s")
+				XY $rty 1 ${s[$rty]}
+				rty=$((rty+1))
+				if (($rty>3))
+				then
+					rty=3
+				fi
+				XY $rty 1 ${BDGRY}${s[$rty]}$DEF;;
+			"b")
+				case $rty in
+				"1")
+					break;;
+				"2")
+					settings
+					clear
+					XY 1 0 ${s[1]}
+					XY 2 0 ${s[2]}
+					XY 3 0 ${s[3]}
+					XY $rty 0 ${BDGRY}${s[$rty]}$DEF;;
+				"3")
+					stty echo
+					echo ""
+					exit;;
+				esac;;
+			"q")
+				stty echo
+				echo ""
+				exit;;
+		esac
+	done
+}
+
 trap bye INT
 printf "${COF}"
 stty -echo
 clear
 
+menu
 gen
 start
 print
 while (($c>0))
 do
-	if (($q==0))
+	if (((($q==0))||(($c==0))))
 	then
 		break
 	fi
